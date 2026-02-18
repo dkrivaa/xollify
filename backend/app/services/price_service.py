@@ -3,6 +3,7 @@ import itertools
 import math
 
 
+
 def best_cost_for_k_stores(shoppinglist, k):
     """
     Calculate the best cost for shoppinglist using k stores
@@ -139,10 +140,17 @@ def from_key_to_store_name(key):
     return f'{chain} - {store}'
 
 
-def common_items(store_keys):
-    """ Get list of item codes common to all stores in store_keys """
+def shoppinglist_common_items(session_keys: list, updated_shoppinglist: dict[str, [list]]):
+    """ Get list of items in shopping list across all selected stores """
+    pass
+
+
+
+
+def all_common_items(session_keys):
+    """ Get list of all item codes common to all selected stores """
     item_sets = []
-    for key in store_keys:
+    for key in session_keys:
         items = set(d['ItemCode'] for d in st.session_state[key])
         item_sets.append(items)
     common = set.intersection(*item_sets)
