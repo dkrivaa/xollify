@@ -8,7 +8,7 @@ from backend.app.services.shoppinglist_service import (check_item_in_price_data_
 from backend.app.services.session_state import all_session_keys
 from backend.app.services.price_service import (best_cost_for_k_stores, add_prices_to_shopping_list,
                                                 total_per_store, max_stores, from_key_to_store_name,
-                                                all_common_items)
+                                                shoppinglist_common_items, all_common_items)
 from ui.common_elements import logo
 from ui.common_dialogs import alternatives_dialog
 
@@ -126,15 +126,11 @@ def render():
                         st.divider()
 
         with tab3:
-            # Display all prices for all items with same itemCode in all stores
-            common = all_common_items(session_keys)
-            for item in common:
-                st.write(
-                    f"{item} - {next(d.get('ItemName') or d.get('ItemNm') for d in st.session_state[session_keys[1]] if d['ItemCode'] == item)}")
-                for key in session_keys:
-                    price = next((d['ItemPrice'] for d in st.session_state[key] if d['ItemCode'] == item), None)
-                    st.write(f"{from_key_to_store_name(key)}:", f"₪ {price}")
-                st.divider()
+            common = shoppinglist_common_items(updated_shoppinglist=updated)
+            st.write(common)
+
+
+
 
 
 

@@ -140,9 +140,21 @@ def from_key_to_store_name(key):
     return f'{chain} - {store}'
 
 
-def shoppinglist_common_items(session_keys: list, updated_shoppinglist: dict[str, [list]]):
+def shoppinglist_common_items(updated_shoppinglist: dict[str, [list]]):
     """ Get list of items in shopping list across all selected stores """
-    pass
+    # Assume all inner lists have the same length
+    keys = list(updated_shoppinglist.keys())
+    length = len(next(iter(updated_shoppinglist.values())))
+
+    result = []
+
+    for i in range(length):
+        row = {}
+        for key in keys:
+            row[key] = updated_shoppinglist[key][i]
+        result.append(row)
+
+    return result
 
 
 
