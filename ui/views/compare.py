@@ -30,9 +30,19 @@ def add_item_to_shoppinglists():
     session_keys = all_session_keys()
 
     for idx, key in enumerate(session_keys):
+        # Flag "raised" when user press 'compare prices' button pressed
+        if st.session_state['make_new_shoppinglists']:
+            for key in session_keys:
+                if f'items_list_{key}' in st.session_state:
+                    del st.session_state[f'items_list_{key}']
+
+        # Reset flag
+        st.session_state['make_new_shoppinglists'] = False
+
         # Make copy of items_list for use with each key (if copy doesn't exist)
         if f'items_list_{key}' not in st.session_state:
             st.session_state[f'items_list_{key}'] = copy.deepcopy(st.session_state.get('items_list', []))
+        # Get the current key (store)
         st.session_state['current_key'] = key
 
         for item in st.session_state.get(f'items_list_{key}', []):
@@ -49,8 +59,6 @@ def add_item_to_shoppinglists():
                 st.rerun()
 
 
-
-
 def render():
     """ The main function to render the compare page """
     logo()
@@ -61,7 +69,6 @@ def render():
 
     # Add prices to the shopping lists
     updated = add_prices_to_shopping_list(st.session_state.get('shopping_list'))
-    st.write(updated)
 
     # Tabs to display data
     tab1, tab2, tab3 = st.tabs(['Total per Store', 'Save the Most', 'All Prices'])
@@ -126,17 +133,25 @@ def render():
                         st.divider()
 
         with tab3:
+            """ Display all prices for items in shoppinglists """
+            # Make a dict where each entry is dict with price for each store
             common = shoppinglist_common_items(updated_shoppinglist=updated)
             st.write(common)
-
-
-
-
-
-
-
-
-
+            for product in common:
+                # Get the item code and product name from the first key (store)
+                first = next(iter(product.values()))
+                st.subheader(f":blue[{first['Item Code']} - {first['Product Name']}]")
+                for key, value in product.items():
+                    # If item code is different add a item code and product name for specific store
+                    if value['Item Code'] != first['Item Code']:
+                        delta = f"{value['Item Code']} - {value['Product Name']}"
+                    else:
+                        delta=None
+                    st.metric(label=from_key_to_store_name(key),
+                              value=f"₪ {float(value['price'])}",
+                              delta=delta,
+                              delta_arrow='off')
+                st.divider()
 
 
 if __name__ == "__main__":

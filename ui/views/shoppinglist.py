@@ -113,6 +113,8 @@ def render():
                      help='Compare prices for items in your shopping list across selected stores '
                           'and get optimized shopping list based on prices at those stores.',
                      icon=":material/compare_arrows:", icon_position="left", ):
+            # Flag to make / remake shoppinglists - Used when user adds items
+            st.session_state['make_new_shoppinglists'] = True
             st.switch_page('ui/views/compare.py')
 
 
