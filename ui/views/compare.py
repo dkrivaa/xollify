@@ -9,6 +9,7 @@ from backend.app.services.session_state import all_session_keys
 from backend.app.services.price_service import (best_cost_for_k_stores, add_prices_to_shopping_list,
                                                 total_per_store, max_stores, from_key_to_store_name,
                                                 shoppinglist_common_items, all_common_items)
+from backend.app.utilities.general import session_code
 from ui.common_elements import logo
 from ui.common_dialogs import alternatives_dialog
 
@@ -32,10 +33,8 @@ def add_item_to_shoppinglists():
     for idx, key in enumerate(session_keys):
         # Flag "raised" when user press 'compare prices' button pressed
         if st.session_state['make_new_shoppinglists']:
-            for key in session_keys:
-                if f'items_list_{key}' in st.session_state:
-                    del st.session_state[f'items_list_{key}']
-
+            if f'items_list_{key}' in st.session_state:
+                del st.session_state[f'items_list_{key}']
         # Reset flag
         st.session_state['make_new_shoppinglists'] = False
 
@@ -77,6 +76,8 @@ def render():
     with tab1:
         # Calc totals
         totals = total_per_store(updated)
+        # Sort totals according to order in all_session_keys()
+        totals = {k: totals[k] for k in all_session_keys()}
 
         # Display totals for each store
         for key in totals:
@@ -124,26 +125,29 @@ def render():
             )
 
             st.divider()
+            st.subheader('For Maximum Savings')
             for store in best_combo:
-                st.subheader(from_key_to_store_name(store))
-                with st.expander('For max SAVING'):
+                with st.expander(f'{from_key_to_store_name(store)}'):
                     for item in best_plan[store]:
                         st.write(f"{item['item']} - {item['item_name']}:")
                         st.write(f"{item['quantity']} x ₪ {float(item['unit_price']):.2f} = ₪ {item['total_price']:.2f}")
                         st.divider()
 
         with tab3:
-            """ Display all prices for items in shoppinglists """
+            # Display all prices for items in shoppinglists
             # Make a dict where each entry is dict with price for each store
             common = shoppinglist_common_items(updated_shoppinglist=updated)
-            st.write(common)
+            # Get the item code and product name from the main key (store)
+            main_store_key = next(key for key in st.session_state['main_store'])
             for product in common:
-                # Get the item code and product name from the first key (store)
-                first = next(iter(product.values()))
-                st.subheader(f":blue[{first['Item Code']} - {first['Product Name']}]")
+                # Sort product (dict with info for specific item in all stores
+                product = {k: product[k] for k in all_session_keys()}
+                # Get the item dict for main_store
+                main = next(v for k, v in product.items() if k == main_store_key)
+                st.subheader(f":blue[{main['Item Code']} - {main['Product Name']}]")
                 for key, value in product.items():
                     # If item code is different add a item code and product name for specific store
-                    if value['Item Code'] != first['Item Code']:
+                    if value['Item Code'] != main['Item Code']:
                         delta = f"{value['Item Code']} - {value['Product Name']}"
                     else:
                         delta=None

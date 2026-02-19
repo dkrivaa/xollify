@@ -37,7 +37,6 @@ def convert_for_download(df):
 
 def check_item_in_price_data_and_add_to_store_shoppinglist(item: dict, key: str):
     """ Check if item (item code) available in store price data and add to shopping list if found """
-
     match = next((d for d in st.session_state.get(key, []) if d['ItemCode'] == item['Item Code']), None)
     # If item found in store:
     if match is not None:
