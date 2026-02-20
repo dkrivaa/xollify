@@ -102,7 +102,7 @@ def render():
                 label='Max Number of Stores to Visit',
                 min_value=1,
                 max_value=len(session_keys),
-                value=2,
+                value=min(2, len(session_keys)),
                 step=1
             )
 
@@ -118,7 +118,7 @@ def render():
             st.metric(
                 label='Total Cost',
                 value=f"₪ {best_total:.2f}",
-                delta=f"₪ {best_total - total_per_store(updated)[best_combo[0]]:.2f} saved",
+                delta=f"₪ {best_total - min(totals.values()):.2f} saved",
                 delta_arrow='off'
             )
 

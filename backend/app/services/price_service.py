@@ -3,37 +3,34 @@ import itertools
 import math
 
 
-
 def best_cost_for_k_stores(shoppinglist, k):
     """
-    Calculate the best cost for shoppinglist using k stores
+    Calculate the best cost for shoppinglist using k stores.
 
+    Tries all combinations of up to k stores and finds the combination
+    where buying each item at the cheapest available store yields the lowest total cost.
+
+    Args:
         shoppinglist: {
-            "StoreA": [ {item, quantity, price}, ... ],
+            "StoreA": [ {"Item Code": ..., "Product Name": ..., "Quantity": ..., "price": ...}, ... ],
             "StoreB": [...],
             ...
         }
         k: max number of stores to visit
-    """
 
+    Returns:
+        best_combo: tuple of store keys with lowest total cost
+        best_total: total cost for best combination
+        best_plan: dict of {store: [items assigned to that store]}
+    """
     stores = list(shoppinglist.keys())
 
-    # Number of items from any store (all lists same length)
+    # Number of items (all store lists are the same length)
     n_items = len(next(iter(shoppinglist.values())))
 
-    # ---- Build shopping list using QUANTITY from any store ----
-    shopping_list = []
-    for i in range(n_items):
-        # quantity is identical across stores
-        qty = shoppinglist[stores[0]][i]["Quantity"]
-        shopping_list.append({
-            "idx": i,
-            "quantity": qty
-        })
-
-    # ---- Build price maps ----
+    # ---- Build price maps: {store: {item_index: float(price)}} ----
     price_maps = {
-        store: {i: shoppinglist[store][i]["price"] for i in range(n_items)}
+        store: {i: float(shoppinglist[store][i]["price"]) for i in range(n_items)}
         for store in stores
     }
 
@@ -41,40 +38,35 @@ def best_cost_for_k_stores(shoppinglist, k):
     best_total = math.inf
     best_plan = None
 
-    # ---- Try store combinations ----
+    # ---- Try all store combinations up to size k ----
     for r in range(1, k + 1):
         for combo in itertools.combinations(stores, r):
 
             store_plan = {s: [] for s in combo}
             total_cost = 0
 
-            for entry in shopping_list:
-                idx = entry["idx"]
-                qty = entry["quantity"]
+            for i in range(n_items):
+                # Get available prices for this item across stores in combo
+                available = [(store, price_maps[store][i]) for store in combo]
 
-                # available prices for this item index
-                available = [(store, price_maps[store][idx]) for store in combo]
-
-                # choose cheapest store
+                # Choose the cheapest store for this item
                 best_store, unit_price = min(available, key=lambda x: x[1])
-                cost = float(unit_price) * qty
 
-                # Get item code
-                item = shoppinglist[best_store][idx]["Item Code"]
-                # ⭐ USE THE ORIGINAL ITEM NAME FROM THE ASSIGNED STORE
-                item_name = shoppinglist[best_store][idx]["Product Name"]
+                # Take quantity from the assigned store
+                qty = shoppinglist[best_store][i]["Quantity"]
+                cost = unit_price * qty
 
                 store_plan[best_store].append({
-                    'item': item,
-                    "item_name": item_name,  # original name from that store
-                    "quantity": qty,
-                    "unit_price": unit_price,
-                    "total_price": cost
+                    'item': shoppinglist[best_store][i]["Item Code"],
+                    'item_name': shoppinglist[best_store][i]["Product Name"],  # name from assigned store
+                    'quantity': qty,
+                    'unit_price': unit_price,
+                    'total_price': cost
                 })
 
                 total_cost += cost
 
-            # record best result
+            # Record best result if this combo is cheaper
             if total_cost < best_total:
                 best_total = total_cost
                 best_combo = combo

@@ -1,3 +1,6 @@
+import streamlit as st
+
+
 class SupermarketChain:
     """ The parent class for all supermarket chains """
     registry = []  # holds all subclasses automatically
@@ -32,7 +35,9 @@ class SupermarketChain:
         try:
             return await cls.prices(store_code)
         except Exception as e:
-            print(f"Error getting prices for {cls.alias} store {store_code}: {e}")
+            msg = f"Error getting prices for {cls.alias} store {store_code}. Please try again in a few minutes."
+            print(f'{msg} + {e}')
+            st.session_state.setdefault('load_errors', []).append(msg)
             return None
 
     @classmethod

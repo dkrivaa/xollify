@@ -54,8 +54,10 @@ def render():
                         run_async(load_stores_price_data)
                     # Switch page
                     st.switch_page('ui/views/shoppinglist.py')
-                except ExceptionGroup as eg:
-                    st.write(eg)
+                except Exception as e:
+                    if 'load_errors' in st.session_state:
+                        for err in st.session_state['load_errors']:
+                            st.warning(err)
 
 
 if __name__ == "__main__":
