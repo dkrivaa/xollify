@@ -76,11 +76,19 @@ def store_selector(chain_code):
     return store, store_name
 
 
-def item_selector(price_data, label: str = 'Item'):
+def item_selector(price_data, label: str = 'Item', session_key: str = None):
+    # Remove items that are left in items list
+    if session_key:
+        # The items codes left in items_list_key:
+        items_codes_left = [d['Item Code'] for d in st.session_state[f'items_list_{session_key}']]
+        options = [d['ItemCode'] for d in price_data if d['ItemCode'] not in items_codes_left]
+    else:
+        options = [d['ItemCode'] for d in price_data]
+
     item = st.selectbox(
         label=label,
         placeholder='Select Item',
-        options=sorted([d['ItemCode'] for d in price_data], key=int),
+        options=sorted(options, key=int),
         format_func=lambda x: f"{x} - {next(d.get('ItemName') or d.get('ItemNm') for d in price_data
                                             if d['ItemCode'] == x)}",
         index=None,

@@ -106,7 +106,7 @@ class ProductDatabase:
 
         # Build query
         query_text = ' '.join([
-            product.get('ItemName', ''),
+            product.get('ItemName') or product.get('ItemNm'),
             product.get('ManufacturerItemDescription', ''),
             product.get('ManufacturerName', ''),
         ])
@@ -226,9 +226,12 @@ class ProductMatcher:
 
         if verbose:
             print(f"\nTop {min(5, len(candidates))} candidates:")
-            for i, c in enumerate(candidates[:5], 1):
-                print(f"{i}. {(c.get('ItemName') or c.get('ItemNm', ''))[:40]} | {c['ManufacturerName'][:20]} | "
-                      f"₪{c['ItemPrice']} | {c['ItemCode']} | sim={c.get('_similarity', 0):.3f}")
+            try:
+                for i, c in enumerate(candidates[:5], 1):
+                    print(f"{i}. {(c.get('ItemName') or c.get('ItemNm', ''))[:40]} | {c['ManufacturerName'][:20]} | "
+                          f"₪{c['ItemPrice']} | {c['ItemCode']} | sim={c.get('_similarity', 0):.3f}")
+            except Exception:
+                pass
         # Number of candidates to return
         n = min(5, len(candidates))
         return candidates[:n]

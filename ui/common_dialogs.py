@@ -49,6 +49,9 @@ def alternatives_dialog():
     # Quantity taken from relevant item in items_list
     quantity = st.session_state['quantity']
 
+    # Remove alternative items if item code in items codes left in items_list_key:
+    items_codes_left = [d['Item Code'] for d in st.session_state[f'items_list_{key}']]
+
     # The actual dialog
 
     # Get user input
@@ -57,26 +60,41 @@ def alternatives_dialog():
                  f"Please select one of the alternative items:")
 
         if alternatives:
+            options = [d['ItemCode'] for d in alternatives if d['ItemCode'] not in items_codes_left]
             alt = st.radio(label='Suggested',
-                           options=[d['ItemCode'] for d in alternatives],
+                           options=options,
                            format_func=lambda x: (
                                lambda d: f'{d.get("ItemName") or d.get("ItemNm")} - ₪{float(d["ItemPrice"]):.2f}'
                            )(next(d for d in alternatives if d["ItemCode"] == x)),
-                           )
+                           index=None)
 
         user_alt = item_selector(price_data=st.session_state.get(key),
-                                 label='Search for alternative item')
+                                 label='Search for alternative item',
+                                 session_key=key)
+
+        alt_qty = st.number_input(label='Change quantity',
+                                  min_value=0,
+                                  value=0,
+                                  step=1,
+                                  )
 
         # When user accepts alternative item
-        submit = st.form_submit_button('OK', icon=':material/add:', icon_position='left')
+        submit = st.form_submit_button('Submit', icon=':material/add:', icon_position='left')
 
     if submit:
         # Add alternative to relevant store's shopping list
+
+        # User selects item from dropdown
         if user_alt:
             alt_dict = next(d for d in st.session_state.get(key) if d['ItemCode'] == str(user_alt))
             alt = user_alt
+        # User selects from the radio (generated alternatives)
         else:
             alt_dict = next(d for d in alternatives if d['ItemCode'] == str(alt))
+
+        # User enter alternative quantity
+        if alt_qty != 0:
+            quantity = float(alt_qty)
 
         if alt not in [i['Item Code'] for i in st.session_state['shopping_list'].get(key, [])]:
             st.session_state['shopping_list'].setdefault(key, []).append({'Item Code': str(alt),

@@ -3,8 +3,7 @@ import streamlit as st
 from backend.app.services.session_state import (initialize_session_state, clear_main_store,
                                                 clear_compare_store)
 from backend.app.services.async_runner import run_async
-from backend.app.pipeline.fresh_price_promo import (load_stores_price_data,
-                                                    load_main_store_promo_data)
+from backend.app.pipeline.fresh_price_promo import (load_stores_price_data)
 from ui.common_dialogs import select_store_dialog
 from ui.common_elements import logo, plan_header, selected_stores_element
 

@@ -3,13 +3,11 @@ import itertools
 import math
 import copy
 
-from backend.app.services.shoppinglist_service import (check_item_in_price_data_and_add_to_store_shoppinglist,
-                                                       get_item_dict_from_any_store)
+from backend.app.services.shoppinglist_service import check_item_in_price_data_and_add_to_store_shoppinglist
 from backend.app.services.session_state import all_session_keys
 from backend.app.services.price_service import (best_cost_for_k_stores, add_prices_to_shopping_list,
-                                                total_per_store, max_stores, from_key_to_store_name,
-                                                shoppinglist_common_items, all_common_items)
-from backend.app.utilities.general import session_code
+                                                total_per_store, from_key_to_store_name,
+                                                shoppinglist_common_items)
 from ui.common_elements import logo
 from ui.common_dialogs import alternatives_dialog
 
@@ -31,7 +29,7 @@ def add_item_to_shoppinglists():
     session_keys = all_session_keys()
 
     for idx, key in enumerate(session_keys):
-        # Flag "raised" when user press 'compare prices' button pressed
+        # Flag "raised" when user press 'compare prices' button
         if st.session_state['make_new_shoppinglists']:
             if f'items_list_{key}' in st.session_state:
                 del st.session_state[f'items_list_{key}']
@@ -103,7 +101,7 @@ def render():
             k = st.slider(
                 label='Max Number of Stores to Visit',
                 min_value=1,
-                max_value=max_stores(),
+                max_value=len(session_keys),
                 value=2,
                 step=1
             )

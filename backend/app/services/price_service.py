@@ -125,11 +125,6 @@ def total_per_store(shoppinglist):
     return totals
 
 
-def max_stores():
-    """ Get max number of stores in shoppinglist """
-    return len(st.session_state['shopping_list'].keys())
-
-
 def from_key_to_store_name(key):
     """ Convert session key to chain, store name """
     all_stores_dict = st.session_state.get('main_store') | st.session_state.get('compare_store')
