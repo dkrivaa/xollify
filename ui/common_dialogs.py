@@ -37,7 +37,7 @@ def select_store_dialog(store_type: int = 2):
             st.rerun()
 
 
-@st.dialog(title='Alternatives for missing item', dismissible=False, )
+@st.dialog(title="Item Not Found", dismissible=False, )
 def alternatives_dialog():
     """ Dialog to show alternative items when item not found in store. """
     # Item dict from price data for item to be replaced
