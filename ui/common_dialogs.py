@@ -56,8 +56,10 @@ def alternatives_dialog():
 
     # Get user input
     with st.form("Item Not Found", clear_on_submit=True):
-        st.write(f"No match found for {item['Product Name']} in {from_key_to_store_name(key)}. "
-                 f"Please select one of the alternative items:")
+        st.write(f"No match found for:")
+        st.write(f':blue[{from_key_to_store_name(key)}]')
+        st.write(f':blue[{item['Product Name']}]')
+        st.write(f"Please select one of the alternative items:")
 
         if alternatives:
             options = [d['ItemCode'] for d in alternatives if d['ItemCode'] not in items_codes_left]
