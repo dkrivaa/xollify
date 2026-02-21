@@ -124,10 +124,8 @@ def render():
 
             st.divider()
             st.subheader('For Maximum Savings')
-            st.write(len(st.session_state['items_list']))
             for store in best_combo:
                 with st.expander(f'{from_key_to_store_name(store)}'):
-                    st.write(len(best_plan[store]))
                     for item in best_plan[store]:
                         st.write(f"{item['item']} - {item['item_name']}:")
                         st.write(f"{item['quantity']} x ₪ {float(item['unit_price']):.2f} = ₪ {item['total_price']:.2f}")
