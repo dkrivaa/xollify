@@ -49,8 +49,12 @@ def alternatives_dialog():
     # Quantity taken from relevant item in items_list
     quantity = st.session_state['quantity']
 
-    # Remove alternative items if item code in items codes left in items_list_key:
-    items_codes_left = [d['Item Code'] for d in st.session_state[f'items_list_{key}']]
+    # The items codes that cannot be used for alternative item (items still left in items_list_{key} or already used item codes for items in shopping list:
+    items_codes_left = list({
+                                d['Item Code'] for d in st.session_state[f'items_list_{key}']
+                            } | {
+                                d['Item Code'] for d in st.session_state['shopping_list'].get(key, [])
+                            })
 
     # The actual dialog
 
@@ -75,9 +79,9 @@ def alternatives_dialog():
                                  session_key=key)
 
         alt_qty = st.number_input(label='Change quantity',
-                                  min_value=0,
-                                  value=0,
-                                  step=1,
+                                  min_value=0.0,
+                                  value=0.0,
+                                  step=1.0,
                                   )
 
         # When user accepts alternative item
@@ -95,8 +99,8 @@ def alternatives_dialog():
             alt_dict = next(d for d in alternatives if d['ItemCode'] == str(alt))
 
         # User enter alternative quantity
-        if alt_qty != 0:
-            quantity = float(alt_qty)
+        if alt_qty != 0.0:
+            quantity = alt_qty
 
         if alt not in [i['Item Code'] for i in st.session_state['shopping_list'].get(key, [])]:
             st.session_state['shopping_list'].setdefault(key, []).append({'Item Code': str(alt),

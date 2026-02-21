@@ -79,8 +79,12 @@ def store_selector(chain_code):
 def item_selector(price_data, label: str = 'Item', session_key: str = None):
     # Remove items that are left in items list
     if session_key:
-        # The items codes left in items_list_key:
-        items_codes_left = [d['Item Code'] for d in st.session_state[f'items_list_{session_key}']]
+        # The items codes that cannot be used for alternative item (items still left in items_list_{session_key} or already used item codes for items in shopping list:
+        items_codes_left = list({
+                                    d['Item Code'] for d in st.session_state[f'items_list_{session_key}']
+                                } | {
+                                    d['Item Code'] for d in st.session_state['shopping_list'].get(session_key, [])
+                                })
         options = [d['ItemCode'] for d in price_data if d['ItemCode'] not in items_codes_left]
     else:
         options = [d['ItemCode'] for d in price_data]
