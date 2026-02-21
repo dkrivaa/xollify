@@ -18,7 +18,7 @@ def render():
     plan_header()
     st.divider()
 
-    with st.container(border=True):
+    with st.container():
         if st.button(label=':blue[Select "Home Store"]',
                      width='stretch',
                      type='tertiary',
