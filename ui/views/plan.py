@@ -21,6 +21,7 @@ def render():
     with st.container(border=True):
         if st.button(label=':blue[Select "Home Store"]',
                      width='stretch',
+                     type='tertiary',
                      key='main_store_button',
                      help='Select the store you usually shop at. '
                           'This will be used as the main store for price comparison and shopping list optimization.'
@@ -31,6 +32,7 @@ def render():
 
         if st.button(label=':blue[Select stores for price comparison]',
                      width='stretch',
+                     type='tertiary',
                      key='other_store_button',
                      help='Select one or more stores for price comparison. '
                           'You can select stores from different supermarket chains. '

@@ -16,13 +16,7 @@ def logo():
 def plan_header():
     """ Display the header for the shopping plan section. """
     st.subheader('Plan Your Shopping')
-    # st.pills(label='3 simple steps:',
-    #          label_visibility='hidden',
-    #          options=[':blue[:material/counter_1: Select Stores]',
-    #                   ':green[:material/counter_2: Make Shopping List]',
-    #                   ':orange[:material/counter_3: Price Comparison and Optimization]'],
-    #          disabled=True
-    #          )
+
 
 def chain_selector():
     """ Chain selector dropdown """
@@ -172,7 +166,7 @@ def selected_stores_element():
         # Display the main store
         with st.container():
             if st.session_state['main_store']:
-                st.markdown(":blue[**Main store:**]")
+                st.markdown(":blue[**Home store:**]")
                 # The data
                 main_store_info = next(iter(st.session_state['main_store'].values()))
                 # Display
@@ -182,7 +176,7 @@ def selected_stores_element():
                 st.button(label=':material/delete: Clear', width='stretch',
                           key='clear_main_store_button', on_click=clear_main_store)
             else:
-                st.write("**Main Store:** :red[Not Selected]")
+                st.write("**Home Store:** :red[Not Selected]")
 
         # Display stores to compare
         with st.container():
