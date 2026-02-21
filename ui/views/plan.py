@@ -45,6 +45,8 @@ def render():
         # Display selected stores
         selected_stores_element()
 
+        st.space()
+
     with st.container():
         # If main_store is selected, go to shoppinglist page
         if 'main_store' in st.session_state and st.session_state['main_store']:
