@@ -22,15 +22,16 @@ def render():
     with st.container():
         if st.button(label=':blue[Where are you shopping?]',
                      width='stretch',
+                     type='tertiary',
                      key='main_store_button',):
             select_store_dialog(store_type=1)
 
         st.space()
 
-        if st.button(
-            label=':blue[Stores for price comparison]',
-            width='stretch',
-            key='other_store_button',
+        if st.button(label=':blue[Stores for price comparison]',
+                     width='stretch',
+                     type='tertiary',
+                     key='other_store_button',
         ):
             select_store_dialog()
 
