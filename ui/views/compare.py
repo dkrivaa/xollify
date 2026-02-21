@@ -109,12 +109,6 @@ def render():
             # Get best combination, total cost and shopping plan for each of k stores
             best_combo, best_total, best_plan = best_cost_for_k_stores(updated, k=k)
 
-            st.subheader('Visit:')
-            for store in best_combo:
-                st.write(from_key_to_store_name(store))
-
-            st.divider()
-
             st.metric(
                 label='Total Cost',
                 value=f"₪ {best_total:.2f}",
@@ -123,13 +117,23 @@ def render():
             )
 
             st.divider()
-            st.subheader('For Maximum Savings')
-            for store in best_combo:
-                with st.expander(f'{from_key_to_store_name(store)}'):
+
+            st.subheader('For Maximum Savings Visit:')
+            for idx, store in enumerate(best_combo):
+                with st.expander(f'- {from_key_to_store_name(store)}'):
                     for item in best_plan[store]:
                         st.write(f"{item['item']} - {item['item_name']}:")
                         st.write(f"{item['quantity']} x ₪ {float(item['unit_price']):.2f} = ₪ {item['total_price']:.2f}")
                         st.divider()
+
+
+
+
+            # st.divider()
+            # st.subheader('For Maximum Savings')
+            # for store in best_combo:
+            #     with st.expander(f'{from_key_to_store_name(store)}'):
+
 
         with tab3:
             # Display all prices for items in shoppinglists

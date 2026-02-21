@@ -16,7 +16,9 @@ def render():
     initialize_session_state()
 
     logo()
-    st.subheader('Get :blue[Price and Promo] info while shopping',)
+    st.subheader('Get :blue[Price and Promo] info while shopping',
+                 width='stretch',
+                 text_alignment='center')
     st.divider()
 
     with st.container():

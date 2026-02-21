@@ -7,10 +7,12 @@ from ui.common_elements import logo
 def render():
     """ Render the home page with welcome message and instructions. """
     logo()
-    st.write('The shopping companion that saves')
-    st.markdown(
-        '<span style="font-size:24px">time</span> and <span style="font-size:24px">money</span>!!',
-        unsafe_allow_html=True)
+    st.markdown('The shopping companion that saves '
+                '<span style="font-size:24px">time</span> and <span style="font-size:24px">money</span>!!',
+                unsafe_allow_html=True,
+                width='stretch',
+                text_alignment='center'
+                )
     st.divider()
     st.space()
     shop = st.button(label=':material/shopping_cart: Get price and promo info while shopping',

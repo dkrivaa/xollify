@@ -10,12 +10,16 @@ from backend.app.services.session_state import (initialize_session_state, clear_
 
 def logo():
     """ Display the app logo. """
-    return st.title(':orange[:material/attach_money: Xollify]')
+    return st.title(':orange[:material/attach_money: Xollify]',
+                    width='stretch',
+                    text_alignment='center')
 
 
 def plan_header():
     """ Display the header for the shopping plan section. """
-    st.subheader('Plan Your Shopping')
+    st.subheader('Plan Your Shopping',
+                 width='stretch',
+                 text_alignment='center')
 
 
 def chain_selector():
@@ -162,7 +166,7 @@ def selected_stores_element():
     Renders the selected stores element - an expander with the main store and stores to compare,
     each with a clear button
     """
-    with st.expander('Your Selected Stores'):
+    with st.expander('Your Selected Stores',):
         # Display the main store
         with st.container():
             if st.session_state['main_store']:
