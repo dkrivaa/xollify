@@ -20,6 +20,7 @@ def render():
     st.space()
     plan = st.button(label=':material/list: Prepare shopping list and compare prices',
                      width='stretch',
+                     type='tertiary',
                      key='plan')
 
     if shop:
