@@ -63,7 +63,7 @@ def render():
 
         st.divider()
         # Display selected stores
-        selected_stores_element()
+        selected_stores_element(label="'Home Store'")
 
 
 if __name__ == "__main__":

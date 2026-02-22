@@ -1,11 +1,39 @@
 import streamlit as st
 
+from backend.app.services.session_state import initialize_session_state
+from backend.app.services.async_runner import run_async
+from backend.app.pipeline.fresh_price_promo import (load_stores_price_data,
+                                                    load_main_store_promo_data)
 from backend.app.services.session_state import clear_session_state
-from ui.common_elements import logo
+from ui.common_elements import logo, selected_stores_element
+from ui.common_dialogs import select_store_dialog
+
+
+def select_stores(label: str):
+    """ Select "home" and "compare" stores"""
+    with st.container():
+        if st.button(label=f'{label}',
+                     width='stretch',
+                     type='tertiary',
+                     icon=':material/store:',
+                     icon_position='left',
+                     key='main_store_button', ):
+            select_store_dialog(store_type=1)
+
+        if st.button(label='Stores for price comparison',
+                     width='stretch',
+                     type='tertiary',
+                     icon=':material/add_business:',
+                     icon_position='left',
+                     key='other_store_button'):
+            select_store_dialog()
 
 
 def render():
-    """ Render the home page with welcome message and instructions. """
+    """ Render the home page with general selection. """
+    # Initialize session state variables
+    initialize_session_state()
+
     logo()
     st.markdown('The shopping companion that saves '
                 '<span style="font-size:24px">time</span> and <span style="font-size:24px">money</span>!!',
@@ -14,29 +42,74 @@ def render():
                 text_alignment='center'
                 )
     st.divider()
-    st.space()
 
-    st.pills(label='Select what to do',
-             label_visibility='hidden',
-             options=[':material/shopping_cart: SHOP', ':material/list: PLAN'],
-             width='stretch',
-             )
+    with st.container():
+        # Select SHOP or PLAN
+        option_maps = {
+            1: ':material/shopping_cart: SHOP',
+            2: ':material/list: PLAN'
+        }
 
-    shop = st.button(label=':material/shopping_cart: Get price and promo info while shopping',
-                     width='stretch',
-                     type='tertiary',
-                     key='shop')
-    st.space()
-    plan = st.button(label=':material/list: Prepare shopping list and compare prices',
-                     width='stretch',
-                     type='tertiary',
-                     key='plan')
+        # Select what to do - SHOP or PLAN
+        option = st.pills(label='Select what to do',
+                          label_visibility='hidden',
+                          options=option_maps.keys(),
+                          format_func=lambda x: option_maps[x],
+                          width='stretch',
+                          default=None)
 
-    if shop:
-        st.switch_page('ui/views/shop.py')
+        col1, col2 = st.columns(2)
 
-    if plan:
-        st.switch_page('ui/views/plan.py')
+        # If SHOP
+        with col1:
+            if option == 1:
+                st.space()
+                select_stores('Where are you shopping?')
+
+                # If main_store is selected, go to item details page
+                if 'main_store' in st.session_state and st.session_state['main_store']:
+                    if st.button(label=':material/info: :green[Get Price and Promo Info]',
+                                 width='stretch',
+                                 key='go_to_item_details_button', ):
+                        # Loading store data
+                        with st.spinner('Loading store data...'):
+                            run_async(load_stores_price_data)
+                            run_async(load_main_store_promo_data)
+                        # Switch page
+                        st.switch_page('ui/views/item.py')
+
+                # Display selected stores
+                st.divider()
+                selected_stores_element(label='Shopping at')
+
+
+
+
+
+        with col2:
+            if option == 2:
+                st.space()
+                select_stores('Select "Home Store"')
+
+                with st.container():
+                    # If main_store is selected, go to shoppinglist page
+                    if 'main_store' in st.session_state and st.session_state['main_store']:
+                        if st.button(label=':green[Make Shopping List]', width='stretch',
+                                     icon=":material/list:", icon_position="left", ):
+                            try:
+                                # Loading store data
+                                with st.spinner('Loading store data...'):
+                                    run_async(load_stores_price_data)
+                                # Switch page
+                                st.switch_page('ui/views/shoppinglist.py')
+                            except Exception as e:
+                                if 'load_errors' in st.session_state:
+                                    for err in st.session_state['load_errors']:
+                                        st.warning(err)
+
+                    st.divider()
+                    # Display selected stores
+                    selected_stores_element(label="'Home Store'")
 
 
 if __name__ == "__main__":

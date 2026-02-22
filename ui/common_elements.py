@@ -161,7 +161,7 @@ def render_percentage_discount(chain: SupermarketChain, promo: dict):
     st.divider()
 
 
-def selected_stores_element():
+def selected_stores_element(label: str):
     """
     Renders the selected stores element - an expander with the main store and stores to compare,
     each with a clear button
@@ -170,7 +170,7 @@ def selected_stores_element():
         # Display the main store
         with st.container():
             if st.session_state['main_store']:
-                st.markdown(":blue[**Home store:**]")
+                st.markdown(f":blue[**{label}:**]")
                 # The data
                 main_store_info = next(iter(st.session_state['main_store'].values()))
                 # Display
