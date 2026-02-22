@@ -46,10 +46,6 @@ def render():
             select_store_dialog()
 
         st.space()
-        # Display selected stores
-        selected_stores_element()
-
-        st.space()
 
     with st.container():
         # If main_store is selected, go to shoppinglist page
@@ -66,6 +62,11 @@ def render():
                     if 'load_errors' in st.session_state:
                         for err in st.session_state['load_errors']:
                             st.warning(err)
+
+        st.divider()
+
+        # Display selected stores
+        selected_stores_element()
 
 
 if __name__ == "__main__":
