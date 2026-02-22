@@ -32,7 +32,7 @@ def chain_selector():
     sorted_codes = sorted(code_to_alias.keys(), key=lambda x: code_to_alias[x])
 
     chain = st.selectbox(
-        label='Select Supermarket Chain',
+        label=f':material/search: Supermarket Chain',
         options=sorted_codes,  # Use sorted list instead of list(code_to_alias)
         format_func=lambda x: code_to_alias[x].capitalize(),
         index=None,
@@ -60,7 +60,7 @@ def store_selector(chain_code):
 
     # Make selectBox to select store
     store = st.selectbox(
-        label='Select Store',
+        label=f':material/search: Store',
         placeholder='Select Store',
         options=sorted([s['store_code'] for s in stores], key=lambda x: int(x)),
         format_func=lambda x: f'{x} - {next(s['store_name'] for s in stores if s['store_code'] == x)}',
@@ -88,7 +88,7 @@ def item_selector(price_data, label: str = 'Item', session_key: str = None):
         options = [d['ItemCode'] for d in price_data]
 
     item = st.selectbox(
-        label=label,
+        label=f':material/search: {label}',
         placeholder='Select Item',
         options=sorted(options, key=int),
         format_func=lambda x: f"{x} - {next(d.get('ItemName') or d.get('ItemNm') for d in price_data

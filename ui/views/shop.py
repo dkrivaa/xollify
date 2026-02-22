@@ -39,19 +39,21 @@ def render():
 
     st.space()
 
-    # Display selected stores
-    selected_stores_element()
-
     # If main_store is selected, go to item details page
     if 'main_store' in st.session_state and st.session_state['main_store']:
-        if st.button(label='Go to item details page', width='stretch',
-                     key='go_to_item_details_button', type='primary'):
+        if st.button(label=':material/info: Get Price and Promo Info', width='stretch',
+                     key='go_to_item_details_button', ):
             # Loading store data
             with st.spinner('Loading store data...'):
                 run_async(load_stores_price_data)
                 run_async(load_main_store_promo_data)
             # Switch page
             st.switch_page('ui/views/item.py')
+        st.divider()
+
+    # Display selected stores
+
+    selected_stores_element()
 
 
 if __name__ == "__main__":
