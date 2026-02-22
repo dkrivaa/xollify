@@ -126,15 +126,6 @@ def render():
                         st.write(f"{item['quantity']} x ₪ {float(item['unit_price']):.2f} = ₪ {item['total_price']:.2f}")
                         st.divider()
 
-
-
-
-            # st.divider()
-            # st.subheader('For Maximum Savings')
-            # for store in best_combo:
-            #     with st.expander(f'{from_key_to_store_name(store)}'):
-
-
         with tab3:
             # Display all prices for items in shoppinglists
             # Make a dict where each entry is dict with price for each store

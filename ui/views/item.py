@@ -7,8 +7,12 @@ from ui.common_elements import logo, item_selector, price_element, promo_element
 def render():
     """ Render the item page with item details and price comparison. """
     logo()
-    st.subheader("Item Details")
-    st.write("Here you can see the details of the selected item and compare prices across selected stores.")
+    st.subheader(body="Item :blue[Price & Promos]",
+                 width='stretch',
+                 text_alignment='center')
+    st.markdown(body="Here you can see the details of the selected item and compare prices across selected stores.",
+                width='stretch',
+                text_alignment='center')
     st.divider()
 
     # Get main store session key (chain_code + store_code) to access price and promo data

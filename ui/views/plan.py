@@ -30,8 +30,6 @@ def render():
                      ):
             select_store_dialog(store_type=1)
 
-        st.space()
-
         if st.button(label=':blue[Select stores for price comparison]',
                      width='stretch',
                      type='tertiary',
