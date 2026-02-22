@@ -64,7 +64,6 @@ def render():
                             st.warning(err)
 
         st.divider()
-
         # Display selected stores
         selected_stores_element()
 

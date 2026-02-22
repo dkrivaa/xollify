@@ -74,7 +74,7 @@ def store_selector(chain_code):
     return store, store_name
 
 
-def item_selector(price_data, label: str = f':material/search: Item', session_key: str = None):
+def item_selector(price_data, label: str = ':material/search: Item', session_key: str = None):
     # Remove items that are left in items list
     if session_key:
         # The items codes that cannot be used for alternative item (items still left in items_list_{session_key} or already used item codes for items in shopping list:

@@ -49,10 +49,9 @@ def render():
                 run_async(load_main_store_promo_data)
             # Switch page
             st.switch_page('ui/views/item.py')
-        st.divider()
 
     # Display selected stores
-
+    st.divider()
     selected_stores_element()
 
 
