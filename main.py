@@ -42,13 +42,13 @@ home_page = st.Page(
 )
 
 shop_page = st.Page(
-    title='SHOP',
+    title='Select Store',
     page='ui/views/shop.py',
     icon=":material/shopping_cart:",
 )
 
 plan_page = st.Page(
-    title='PLAN',
+    title='Select Stores',
     page='ui/views/plan.py',
     icon=":material/list:",
 )
@@ -66,12 +66,16 @@ shoppinglist_page = st.Page(
 )
 
 compare_page = st.Page(
-    title='COMPARE',
+    title='Compare & Optimize',
     page='ui/views/compare.py',
     icon=":material/compare_arrows:",
 )
 
-pages = [home_page, shop_page, plan_page, item_page, shoppinglist_page, compare_page]
+pages = {
+    '': [home_page, ],
+    'SHOP': [shop_page, item_page, ],
+    'PLAN': [plan_page, shoppinglist_page, compare_page]
+}
 
 pg = st.navigation(pages=pages, position='top')
 pg.run()

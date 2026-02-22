@@ -15,6 +15,13 @@ def render():
                 )
     st.divider()
     st.space()
+
+    st.pills(label='Select what to do',
+             label_visibility='hidden',
+             options=[':material/shopping_cart: SHOP', ':material/list: PLAN'],
+             width='stretch',
+             )
+
     shop = st.button(label=':material/shopping_cart: Get price and promo info while shopping',
                      width='stretch',
                      type='tertiary',
