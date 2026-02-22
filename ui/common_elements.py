@@ -37,6 +37,7 @@ def chain_selector():
         format_func=lambda x: code_to_alias[x].capitalize(),
         index=None,
         placeholder='Select Chain',
+
         key='chain_selector'
     )
 
