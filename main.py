@@ -73,8 +73,8 @@ compare_page = st.Page(
 
 pages = {
     '': [home_page, ],
-    'SHOP': [shop_page, item_page, ],
-    'PLAN': [plan_page, shoppinglist_page, compare_page]
+    'SHOP': [item_page, ],
+    'PLAN': [shoppinglist_page, compare_page]
 }
 
 pg = st.navigation(pages=pages, position='top')
