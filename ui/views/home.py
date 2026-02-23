@@ -115,7 +115,6 @@ def render():
                                     if 'load_errors' in st.session_state:
                                         del st.session_state['load_errors']
 
-    st.write(st.session_state)
 
 if __name__ == "__main__":
     render()
