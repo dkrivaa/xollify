@@ -79,7 +79,7 @@ def check_page_ready():
 
 def render():
     """ The main function to render the compare page """
-    check_page_ready()
+    # check_page_ready()
 
     logo()
     st.divider()

@@ -17,7 +17,7 @@ def check_page_ready():
 
 def render():
     """ Render the item page with item details and price comparison. """
-    check_page_ready()
+    # check_page_ready()
 
     logo()
     st.subheader(body="Item :blue[Price & Promos]",

@@ -18,7 +18,7 @@ def check_page_ready():
 
 def render():
     """ Render the shoppinglist page with shopping list input """
-    check_page_ready()
+    # check_page_ready()
 
     # Initialize shopping list in session state if not already present
     if 'shopping_list' not in st.session_state:

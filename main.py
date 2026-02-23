@@ -63,21 +63,27 @@ compare_page = st.Page(
 
 pages = {
         '': [home_page, ],
-    }
-
-if item_page_available() and shoppinglist_page_available() and compare_page_available():
-    pages = {
-        '': [home_page, ],
         'SHOP': [item_page, ],
         'PLAN': [shoppinglist_page, compare_page]
     }
 
-if item_page_available() and shoppinglist_page_available():
-    pages = {
-        '': [home_page, ],
-        'SHOP': [item_page, ],
-        'PLAN': [shoppinglist_page]
-    }
+# pages = {
+#         '': [home_page, ],
+#     }
+#
+# if item_page_available() and shoppinglist_page_available() and compare_page_available():
+#     pages = {
+#         '': [home_page, ],
+#         'SHOP': [item_page, ],
+#         'PLAN': [shoppinglist_page, compare_page]
+#     }
+#
+# if item_page_available() and shoppinglist_page_available():
+#     pages = {
+#         '': [home_page, ],
+#         'SHOP': [item_page, ],
+#         'PLAN': [shoppinglist_page]
+#     }
 
 
 pg = st.navigation(pages=pages, position='top')
