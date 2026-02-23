@@ -166,7 +166,7 @@ def selected_stores_element(label: str):
     Renders the selected stores element - an expander with the main store and stores to compare,
     each with a clear button
     """
-    with st.expander('Your Selected Stores',):
+    with st.expander('Selected Stores',):
         # Display the main store
         with st.container():
             if st.session_state['main_store']:

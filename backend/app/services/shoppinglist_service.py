@@ -42,11 +42,21 @@ def check_item_in_price_data_and_add_to_store_shoppinglist(item: dict, key: str)
     if match is not None:
         # Add item to shopping list for the store (key) in session state if not already present
         if item['Item Code'] not in [i['Item Code'] for i in st.session_state['shopping_list'].get(key, [])]:
+            item['alternative_to'] = None
             st.session_state['shopping_list'].setdefault(key, []).append(item)
         # Remove item from store (key) items_list
         st.session_state[f'items_list_{key}'] = [d for d in st.session_state[f'items_list_{key}']
                                                  if d != item]
         return True
+
+    # If item is already in store (key) shoppinglist with alternative item
+    elif (st.session_state['shopping_list'].get(key, []) and
+          item['Item Code'] in [d['alternative_to'] for d in st.session_state['shopping_list'][key]]):
+        # Remove item from store (key) items_list
+        st.session_state[f'items_list_{key}'] = [d for d in st.session_state[f'items_list_{key}']
+                                                 if d != item]
+        return True
+
     # If item not found in store:
     else:
         # Get item details from price data of any store where available

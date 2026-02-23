@@ -35,13 +35,15 @@ def render():
     initialize_session_state()
 
     logo()
-    st.markdown('The shopping companion that saves '
-                '<span style="font-size:24px">time</span> and <span style="font-size:24px">money</span>!!',
-                unsafe_allow_html=True,
-                width='stretch',
-                text_alignment='center'
-                )
+    st.subheader(body='Optimize Shopping and Save MONEY!!',
+                 width='stretch',
+                 text_alignment='center')
     st.divider()
+
+    # Reset all session_state
+    if st.button(label='Reset', icon=':material/clear_all:', icon_position='left', key='reset_button',
+                 type='tertiary', on_click=clear_session_state):
+        st.rerun()
 
     with st.container():
         # Select SHOP or PLAN
@@ -56,7 +58,8 @@ def render():
                           options=option_maps.keys(),
                           format_func=lambda x: option_maps[x],
                           width='stretch',
-                          default=None)
+                          default=None,
+                          key='option_key')
 
         col1, col2 = st.columns(2)
 
@@ -65,6 +68,11 @@ def render():
             if option == 1:
                 st.space()
                 select_stores('Where are you shopping?')
+
+                # Display selected stores
+                selected_stores_element(label='Shopping at')
+
+                st.divider()
 
                 # If main_store is selected, go to item details page
                 if 'main_store' in st.session_state and st.session_state['main_store']:
@@ -78,18 +86,16 @@ def render():
                         # Switch page
                         st.switch_page('ui/views/item.py')
 
-                # Display selected stores
-                st.divider()
-                selected_stores_element(label='Shopping at')
-
-
-
-
-
+        # If PLAN
         with col2:
             if option == 2:
                 st.space()
                 select_stores('Select "Home Store"')
+
+                # Display selected stores
+                selected_stores_element(label="'Home Store'")
+
+                st.divider()
 
                 with st.container():
                     # If main_store is selected, go to shoppinglist page
@@ -106,10 +112,10 @@ def render():
                                 if 'load_errors' in st.session_state:
                                     for err in st.session_state['load_errors']:
                                         st.warning(err)
+                                    if 'load_errors' in st.session_state:
+                                        del st.session_state['load_errors']
 
-                    st.divider()
-                    # Display selected stores
-                    selected_stores_element(label="'Home Store'")
+    st.write(st.session_state)
 
 
 if __name__ == "__main__":

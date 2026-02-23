@@ -66,8 +66,6 @@ def best_cost_for_k_stores(shoppinglist, k):
 
                 total_cost += cost
 
-            print(f"combo: {combo}, total: {total_cost:.2f}")
-
             # Record best result if this combo is cheaper
             if total_cost < best_total:
                 best_total = total_cost

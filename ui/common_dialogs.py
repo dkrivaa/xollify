@@ -105,7 +105,8 @@ def alternatives_dialog():
         if alt not in [i['Item Code'] for i in st.session_state['shopping_list'].get(key, [])]:
             st.session_state['shopping_list'].setdefault(key, []).append({'Item Code': str(alt),
                                                                           'Product Name': alt_dict['ItemName'] or alt_dict['ItemNm'],
-                                                                          'Quantity': quantity})
+                                                                          'Quantity': quantity,
+                                                                          'alternative_to': item['Item Code']})
         # Remove item from store (key) items_list
         st.session_state[f'items_list_{key}'] = [d for d in st.session_state[f'items_list_{key}']
                                                  if d != item]

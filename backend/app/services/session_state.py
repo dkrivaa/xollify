@@ -7,6 +7,8 @@ def initialize_session_state():
         st.session_state['main_store'] = {}
     if 'compare_store' not in st.session_state:
         st.session_state['compare_store'] = {}
+    if 'option_key' not in st.session_state:
+        st.session_state['option_key'] = None
 
 
 def clear_session_state():

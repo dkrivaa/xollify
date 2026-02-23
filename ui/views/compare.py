@@ -23,19 +23,18 @@ def add_item_to_shoppinglists():
         # prevent running the loop in same pass
         st.stop()
 
-    # Last key (store) flag
-    st.session_state['last_key'] = False
     # Get all session keys
     session_keys = all_session_keys()
 
-    for idx, key in enumerate(session_keys):
-        # Flag "raised" when user press 'compare prices' button
-        if st.session_state['make_new_shoppinglists']:
+    # Flag "raised" when user press 'compare prices' button
+    if st.session_state['make_new_shoppinglists']:
+        for key in session_keys:
             if f'items_list_{key}' in st.session_state:
                 del st.session_state[f'items_list_{key}']
         # Reset flag
         st.session_state['make_new_shoppinglists'] = False
 
+    for idx, key in enumerate(session_keys):
         # Make copy of items_list for use with each key (if copy doesn't exist)
         if f'items_list_{key}' not in st.session_state:
             st.session_state[f'items_list_{key}'] = copy.deepcopy(st.session_state.get('items_list', []))
@@ -52,8 +51,23 @@ def add_item_to_shoppinglists():
 
             # If item not found (=> alternatives already in session_state['alternatives'])
             if not match:
-                # This will rerun the dialog because the dialog flag is set to True
+                # This will rerun the dialog because the dialog flag is now set to True
                 st.rerun()
+
+
+def remove_item_from_shoppinglists():
+    """ Removes items deleted from items_list but still present in shoppinglists """
+    # Get all session keys
+    session_keys = all_session_keys()
+    # Set of all item codes in updated general items_list
+    updated_items = {d['Item Code'] for d in st.session_state['items_list']}
+    for key in session_keys:
+        # For item in stores shoppinglist
+        for item in st.session_state['shopping_list'].get(key, []):
+            # Check if item code or alternative_to code in updated items
+            if not {item['Item Code'], item['alternative_to']} & updated_items:
+                st.session_state['shopping_list'][key] = [d for d in st.session_state['shopping_list'][key]
+                                                          if d != item]
 
 
 def render():
@@ -63,6 +77,8 @@ def render():
 
     # Make shopping lists for each store, incl. replacing missing items
     add_item_to_shoppinglists()
+    # Remove deleted items from shoppinglists
+    remove_item_from_shoppinglists()
 
     # Add prices to the shopping lists
     updated = add_prices_to_shopping_list(st.session_state.get('shopping_list'))
