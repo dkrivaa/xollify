@@ -1,11 +1,24 @@
 import streamlit as st
 
+from backend.app.services.async_runner import run_async
+from backend.app.pipeline.fresh_price_promo import item_page_data
 from backend.app.utilities.general import get_chain_from_code
 from ui.common_elements import logo, item_selector, price_element, promo_element
 
 
+def check_page_ready():
+    """ Check that data for selected store is available"""
+    key = next(iter(st.session_state['main_store'].keys()))
+    if not st.session_state.get(key) or not st.session_state.get(f'{key}_promo_data'):
+        # Loading store data
+        with st.spinner('Loading store data...'):
+            item_page_data()
+
+
 def render():
     """ Render the item page with item details and price comparison. """
+    check_page_ready()
+
     logo()
     st.subheader(body="Item :blue[Price & Promos]",
                  width='stretch',
@@ -63,12 +76,6 @@ def render():
                         promo_element(chain, promo)
         else:
             st.info("No promotions available for this product at the moment.")
-
-
-
-
-
-
 
 
 if __name__ == "__main__":

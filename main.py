@@ -10,6 +10,8 @@ if sys.platform == 'win32':
     asyncio.set_event_loop_policy(asyncio.WindowsProactorEventLoopPolicy())
 
 import streamlit as st
+from backend.app.services.session_state import (item_page_available, shoppinglist_page_available,
+                                                compare_page_available)
 
 
 # Startup code to run the app
@@ -41,22 +43,10 @@ home_page = st.Page(
     default=True
 )
 
-shop_page = st.Page(
-    title='Select Store',
-    page='ui/views/shop.py',
-    icon=":material/shopping_cart:",
-)
-
-plan_page = st.Page(
-    title='Select Stores',
-    page='ui/views/plan.py',
-    icon=":material/list:",
-)
-
 item_page = st.Page(
     title='Item Info',
     page='ui/views/item.py',
-    icon=":material/barcode:",
+    icon=":material/grocery:",
 )
 
 shoppinglist_page = st.Page(
@@ -72,10 +62,23 @@ compare_page = st.Page(
 )
 
 pages = {
-    '': [home_page, ],
-    'SHOP': [item_page, ],
-    'PLAN': [shoppinglist_page, compare_page]
-}
+        '': [home_page, ],
+    }
+
+if item_page_available() and shoppinglist_page_available() and compare_page_available():
+    pages = {
+        '': [home_page, ],
+        'SHOP': [item_page, ],
+        'PLAN': [shoppinglist_page, compare_page]
+    }
+
+if item_page_available() and shoppinglist_page_available():
+    pages = {
+        '': [home_page, ],
+        'SHOP': [item_page, ],
+        'PLAN': [shoppinglist_page]
+    }
+
 
 pg = st.navigation(pages=pages, position='top')
 pg.run()

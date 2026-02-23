@@ -2,18 +2,24 @@ import streamlit as st
 import pandas as pd
 
 from backend.app.services.shoppinglist_service import read_user_list, convert_for_download
-
+from backend.app.pipeline.fresh_price_promo import shoppinglist_page_data
 from backend.app.utilities.general import get_chain_from_code
 from ui.common_elements import logo, plan_header, item_selector
 
 
-
-
-
+def check_page_ready():
+    """ Check that data for selected stores is available"""
+    key = next(iter(st.session_state['main_store'].keys()))
+    if not st.session_state.get(key):
+        # Loading store data
+        with st.spinner('Loading store data...'):
+            shoppinglist_page_data()
 
 
 def render():
     """ Render the shoppinglist page with shopping list input """
+    check_page_ready()
+
     # Initialize shopping list in session state if not already present
     if 'shopping_list' not in st.session_state:
         st.session_state['shopping_list'] = {}

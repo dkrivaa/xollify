@@ -1,5 +1,7 @@
 import streamlit as st
 
+from backend.app.utilities.general import session_code
+
 
 def initialize_session_state():
     """ Initialize session state with default values for main and compare stores. """
@@ -39,3 +41,30 @@ def all_session_keys():
     session_keys.extend(compare_keys)
 
     return session_keys
+
+
+def item_page_available():
+    """ Conditions for item page to be available """
+    # If main_store is selected, go to item details page
+    if 'main_store' in st.session_state and st.session_state['main_store']:
+        return True
+    else:
+        return False
+
+
+def shoppinglist_page_available():
+    """ Conditions for shoppinglist page to be available """
+    # If main store defined
+    if 'main_store' in st.session_state and st.session_state['main_store']:
+        return True
+    else:
+        return False
+
+
+def compare_page_available():
+    """ Conditions for compare page to be available """
+    if shoppinglist_page_available() and st.session_state.get('items_list', None):
+        return True
+    else:
+        return False
+

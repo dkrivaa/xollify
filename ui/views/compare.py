@@ -8,6 +8,7 @@ from backend.app.services.session_state import all_session_keys
 from backend.app.services.price_service import (best_cost_for_k_stores, add_prices_to_shopping_list,
                                                 total_per_store, from_key_to_store_name,
                                                 shoppinglist_common_items)
+from backend.app.services.session_state import compare_page_available
 from ui.common_elements import logo
 from ui.common_dialogs import alternatives_dialog
 
@@ -70,8 +71,16 @@ def remove_item_from_shoppinglists():
                                                           if d != item]
 
 
+def check_page_ready():
+    """ Check that items_list exist """
+    if not compare_page_available():
+        st.switch_page('ui.views/shoppinglist.py')
+
+
 def render():
     """ The main function to render the compare page """
+    check_page_ready()
+
     logo()
     st.divider()
 

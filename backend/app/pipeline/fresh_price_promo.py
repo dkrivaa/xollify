@@ -1,6 +1,7 @@
 import streamlit as st
 import asyncio
 
+from backend.app.services.async_runner import run_async
 from backend.app.utilities.url_to_dict import data_dict
 from backend.app.utilities.general import all_session_keys, all_session_keys_dicts
 from backend.app.core.super_class import SupermarketChain
@@ -90,3 +91,13 @@ async def load_main_store_promo_data():
     # Enter promo data into session state
     st.session_state[f'{main_store_key}_promo_data'] = promo_data
 
+
+def item_page_data():
+    """ Run the functions to get data for item page"""
+    run_async(load_stores_price_data)
+    run_async(load_main_store_promo_data)
+
+
+def shoppinglist_page_data():
+    """ Run the functions to get data for shoppinglist page """
+    run_async(load_stores_price_data)

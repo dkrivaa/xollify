@@ -166,32 +166,34 @@ def selected_stores_element(label: str):
     Renders the selected stores element - an expander with the main store and stores to compare,
     each with a clear button
     """
-    with st.expander('Selected Stores',):
-        # Display the main store
-        with st.container():
-            if st.session_state['main_store']:
-                st.markdown(f":blue[**{label}:**]")
-                # The data
-                main_store_info = next(iter(st.session_state['main_store'].values()))
-                # Display
-                st.write(f'**{main_store_info["chain_alias"].capitalize()}** - '
-                         f'{main_store_info["store_name"]}')
-                # Clear button
-                st.button(label=':material/delete: Clear', width='stretch',
-                          key='clear_main_store_button', on_click=clear_main_store)
-            else:
-                st.write("**Home Store:** :red[Not Selected]")
+    if st.session_state.get('main_store'):
 
-        # Display stores to compare
-        with st.container():
-            if st.session_state['compare_store']:
-                st.markdown(":blue[**Stores to Compare:**]")
-                for key, store in st.session_state['compare_store'].items():
-                    st.write(f'**{store["chain_alias"].capitalize()}** - '
-                             f'{store["store_name"]}')
-                    # Clear button for each compare store
+        with st.expander('Selected Stores',):
+            # Display the main store
+            with st.container():
+                if st.session_state['main_store']:
+                    st.markdown(f":blue[**{label}:**]")
+                    # The data
+                    main_store_info = next(iter(st.session_state['main_store'].values()))
+                    # Display
+                    st.write(f'**{main_store_info["chain_alias"].capitalize()}** - '
+                             f'{main_store_info["store_name"]}')
+                    # Clear button
                     st.button(label=':material/delete: Clear', width='stretch',
-                              key=f'clear_compare_{key}_button',
-                              on_click=clear_compare_store, args=(key,))
-            else:
-                st.write("**Stores to Compare:** :red[Not Selected]")
+                              key='clear_main_store_button', on_click=clear_main_store)
+                else:
+                    st.write("**Home Store:** :red[Not Selected]")
+
+            # Display stores to compare
+            with st.container():
+                if st.session_state['compare_store']:
+                    st.markdown(":blue[**Stores to Compare:**]")
+                    for key, store in st.session_state['compare_store'].items():
+                        st.write(f'**{store["chain_alias"].capitalize()}** - '
+                                 f'{store["store_name"]}')
+                        # Clear button for each compare store
+                        st.button(label=':material/delete: Clear', width='stretch',
+                                  key=f'clear_compare_{key}_button',
+                                  on_click=clear_compare_store, args=(key,))
+                else:
+                    st.write("**Stores to Compare:** :red[Not Selected]")

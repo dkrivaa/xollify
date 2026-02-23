@@ -2,7 +2,7 @@ import streamlit as st
 
 from backend.app.services.session_state import initialize_session_state
 from backend.app.services.async_runner import run_async
-from backend.app.pipeline.fresh_price_promo import (load_stores_price_data,
+from backend.app.pipeline.fresh_price_promo import (item_page_data, load_stores_price_data,
                                                     load_main_store_promo_data)
 from backend.app.services.session_state import clear_session_state
 from ui.common_elements import logo, selected_stores_element
@@ -35,13 +35,13 @@ def render():
     initialize_session_state()
 
     logo()
-    st.subheader(body='Optimize Shopping and Save MONEY!!',
+    st.subheader(body=':grey[Optimize Shopping and Save MONEY!!]',
                  width='stretch',
                  text_alignment='center')
     st.divider()
 
     # Reset all session_state
-    if st.button(label='Reset', icon=':material/clear_all:', icon_position='left', key='reset_button',
+    if st.button(label=':grey[Reset all]', icon=':material/clear_all:', icon_position='left', key='reset_button',
                  type='tertiary', on_click=clear_session_state):
         st.rerun()
 
@@ -67,6 +67,7 @@ def render():
         with col1:
             if option == 1:
                 st.space()
+                # Display select stores element
                 select_stores('Where are you shopping?')
 
                 # Display selected stores
@@ -81,8 +82,7 @@ def render():
                                  key='go_to_item_details_button', ):
                         # Loading store data
                         with st.spinner('Loading store data...'):
-                            run_async(load_stores_price_data)
-                            run_async(load_main_store_promo_data)
+                            item_page_data()
                         # Switch page
                         st.switch_page('ui/views/item.py')
 
@@ -115,6 +115,7 @@ def render():
                                     if 'load_errors' in st.session_state:
                                         del st.session_state['load_errors']
 
+    st.write(st.session_state)
 
 if __name__ == "__main__":
     render()
